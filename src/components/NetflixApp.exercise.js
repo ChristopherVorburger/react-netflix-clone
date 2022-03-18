@@ -1,106 +1,148 @@
 import React from 'react'
-// 🐶 Dans cet exercice tu vas devoir créer une Barre de Menu avec MUI (MaterialUi).
-// commnce par importer les 3 composants MUI suivants :
-//
-//import AppBar from '@mui/material/AppBar'
-//import Toolbar from '@mui/material/Toolbar'
-//import Typography from '@mui/material/Typography'
-//import './Netflix.css'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+
+import './Netflix.css'
 
 const NetflixApp = () => {
-  // 🐶 Créé un objet 'appBarStyle' qui contiendra du du style pour la 'AppBar'
-  // - background: 'transparent'
-  // - boxShadow: 'none'
-  // Ce style permet d'avoir la fond transparent
+  const [appBarStyle, setAppBarStyle] = React.useState({
+    background: 'transparent',
+    boxShadow: 'none',
+  })
 
-  // 🐶 Crée un objet 'margin10' qui contiendra du du style espacer les items du menu
-  // - margin: 10
+  React.useEffect(() => {
+    const onScroll = e => {
+      if (e.target.documentElement.scrollTop >= 100) {
+        setAppBarStyle({
+          background: '#111',
+          transition: 'background .5s ease-out',
+          boxShadow: 'none',
+        })
+      } else {
+        setAppBarStyle({
+          background: 'transparent',
+          transition: 'background .5s ease-out',
+          boxShadow: 'none',
+        })
+      }
+    }
+    window.addEventListener('scroll', onScroll)
+
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+  const margin10 = {margin: 10}
   return (
     <div>
-      {/* // ⛏️ supprime cette bare de menu, nous utiliseront MUI */}
-      <div>
-        <img src="images/netflix-logo.png" alt="" height="20" />
-        <a href="/">Acceuil</a>
-        <a href="/">Séries </a>
-        <a href="/">Films </a>
-        <a href="/">Nouveautés </a>
-        <a href="/">Ma liste </a>
-        <img src="images/netflix-avatar.png" alt="" height="20" />
-      </div>
-
-      {/* 🐶 Crée une Barre de menu en utilisant <AppBar>
-        - Applique lui le style 'appBarStyle'
-        Les 7 items de la barre de menu sont : 
-        - Le logo Netflix
-          🤖 <img className="nav__logo" src="/images/netflix-logo.png" alt="" />
-        - Les 5 items du menu 
-          🤖 utilise cela pour chaue menu 
-          <a href="/le_lien">
+      <AppBar style={appBarStyle}>
+        <Toolbar>
+          <img className="nav__logo" src="/images/netflix-logo.png" alt="" />
+          <a href="/">
             <Typography style={margin10} variant="h6">
-              Nom de l'item
+              Acceuil
             </Typography>
           </a>
-        - Le logo Avatar :
-          🤖 <img style={{marginLeft: 'auto'}} className="nav__avatar" src="/images/netflix-avatar.png" alt="" />
-       */}
+          <a href="/series">
+            <Typography style={margin10} variant="h6">
+              Serie
+            </Typography>
+          </a>
+          <a href="/movies">
+            <Typography style={margin10} variant="h6">
+              Films
+            </Typography>
+          </a>
+          <a href="/news">
+            <Typography style={margin10} variant="h6">
+              Nouveautés les plus regardées
+            </Typography>
+          </a>
+          <a href="/list">
+            <Typography style={margin10} variant="h6">
+              Ma liste
+            </Typography>
+          </a>
+          <img
+            style={{marginLeft: 'auto'}}
+            className="nav__avatar"
+            src="/images/netflix-avatar.png"
+            alt=""
+          />
+        </Toolbar>
+      </AppBar>
 
-      {/* 🐶 Pour les éléments suivants, nous n'utiliseront pas MUI,
-      nous utliseront des classes CSS classiques de 'Netflix.css' */}
-
-      {/* 🐶 applique la classe 'banner' sur <header> */}
-      <header>
-        {/* 🐶 applique la classe 'banner__contents' */}
-        <div>
-          {/* 🐶 applique la classe 'banner__title' */}
-          <h1>La casa de papel</h1>
-          {/* 🐶 applique la classe 'banner__buttons' */}
-          <div>
-            {/* 🐶 applique la classe 'banner__button' et 'banner__buttonplay' */}
-            <button>Lecture</button>
-            {/* 🐶 applique la classe 'banner__button' et 'banner__buttonInfo' */}
-            <button>Ajouter à ma liste</button>
+      <header className="banner">
+        <div className="banner__contents">
+          <h1 className="banner__title">La casa de papel</h1>
+          <div className="banner__buttons">
+            <button className="banner__button banner__buttonplay">
+              Lecture
+            </button>
+            <button className="banner__button banner__buttonInfo">
+              Ajouter à ma liste
+            </button>
           </div>
-          {/* 🐶 applique la classe 'synopsis' */}
-          <h1>
+          <h1 className="synopsis">
             Le Professeur recrute une jeune braqueuse et sept autres criminels
             en vue d'un cambriolage grandiose ciblant la Maison royale de la
             Monnaie d'Espagne.
           </h1>
         </div>
+        <div className="banner--fadeBottom"></div>
       </header>
 
-      {/* 🐶 applique la classe 'row' */}
-      <div>
+      <div className="row">
         <h2>Films Netflix</h2>
-        {/* 🐶 applique la classe 'row__posters' */}
-        <div>
-          {/* 🐶 Sur toutes les images
-          - applique la classe 'row__poster' et 'row__posterLarge' 
-          ⛏️ supprime height="250"  */}
-          <img src="images/sample.jpg" alt="" height="250" />
-          <img src="images/sample1.jpg" alt="" height="250" />
-          <img src="images/sample.jpg" alt="" height="250" />
-          <img src="images/sample1.jpg" alt="" height="250" />
+        <div className="row__posters">
+          <img
+            className="row__poster row__posterLarge"
+            src="images/sample.jpg"
+            alt=""
+          />
+          <img
+            className="row__poster row__posterLarge"
+            src="images/sample1.jpg"
+            alt=""
+          />
+          <img
+            className="row__poster row__posterLarge"
+            src="images/sample.jpg"
+            alt=""
+          />
+          <img
+            className="row__poster row__posterLarge"
+            src="images/sample1.jpg"
+            alt=""
+          />
         </div>
       </div>
-
-      {/* 🐶 applique la classe 'row' */}
-      <div>
+      <div className="row">
         <h2>Série Netflix</h2>
-        {/* 🐶 applique la classe 'row__posters' */}
-        <div>
-          {/* 🐶 Sur toutes les images
-          - applique la classe 'row__poster' et 'row__posterLarge' 
-          ⛏️ supprime height="300"  */}
-          <img src="images/sample-poster.jpg" alt="" height="300" />
-          <img src="images/sample-poster1.jpg" alt="" height="300" />
-          <img src="images/sample-poster.jpg" alt="" height="300" />
-          <img src="images/sample-poster1.jpg" alt="" height="300" />
+        <div className="row__posters">
+          <img
+            className="row__poster row__posterLarge"
+            src="images/sample-poster.jpg"
+            alt=""
+          />
+          <img
+            className="row__poster row__posterLarge"
+            src="images/sample-poster1.jpg"
+            alt=""
+          />
+          <img
+            className="row__poster row__posterLarge"
+            src="images/sample-poster.jpg"
+            alt=""
+          />
+          <img
+            className="row__poster row__posterLarge"
+            src="images/sample-poster1.jpg"
+            alt=""
+          />
         </div>
       </div>
 
-      {/* 🐶 applique la classe 'footer' */}
-      <footer>2021 - Netflix Clone</footer>
+      <footer className="footer">2021 - Netflix Clone</footer>
     </div>
   )
 }
