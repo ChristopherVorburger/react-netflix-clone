@@ -53,6 +53,7 @@ const NetflixRow = ({
 
   const watermarkClass = watermark ? 'watermarked' : ''
 
+  // Display Row Skeleton
   if (status === 'fetching' || status === 'idle') {
     return <RowSkeleton title={title} wideImage={wideImage} />
   }
