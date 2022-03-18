@@ -3,9 +3,7 @@ import {TYPE_MOVIE, imagePath400} from '../config'
 import {useFetchData} from '../utils/hooks'
 import {clientApi} from '../utils/clientApi'
 import {Alert, AlertTitle} from '@mui/material'
-// 🐶 importe le composant 'RowSkeleton'
-// ⛏️ supprime 'CircularProgress'
-import CircularProgress from '@mui/material/CircularProgress'
+import {RowSkeleton} from './skeletons/RowSkeleton.exercise'
 
 const NetflixRow = ({
   title = '',
@@ -56,15 +54,7 @@ const NetflixRow = ({
   const watermarkClass = watermark ? 'watermarked' : ''
 
   if (status === 'fetching' || status === 'idle') {
-    return (
-      // ⛏️ supprime cette 'div' et utilise le <HeaderSkeleton> avec les bons 'props'
-      <div className="row">
-        <h2>{title}</h2>
-        <div className="row__posters">
-          <CircularProgress />
-        </div>
-      </div>
-    )
+    return <RowSkeleton title={title} wideImage={wideImage} />
   }
   if (status === 'error') {
     return (
