@@ -10,8 +10,9 @@ import {Alert, AlertTitle} from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import {useFetchData} from '../utils/hooks'
 import './Netflix.css'
+import {TYPE_MOVIE} from 'config'
+import {TYPE_TV} from 'config'
 
-// 🐶 Ajoute des nouveaux types de <NetflixRow /> dans le render
 const useStyles = makeStyles(theme => ({
   alert: {
     width: '50%',
@@ -31,7 +32,7 @@ const NetflixApp = () => {
 
   React.useEffect(() => {
     execute(clientApi(`${type}/${defaultMovieId}`))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (status === 'error') {
@@ -43,42 +44,42 @@ const NetflixApp = () => {
       <NetflixAppBar />
       <NetflixHeader movie={headerMovie?.data} type={type} />
 
-      {/* 
-      🐶 Ajoute les 'props' suivants :
-        - 'watermark' à 'true'
-        - 'type' à TYPE_MOVIE
-        - 'filter' à 'trending'
-        - 'wideImage' à 'true'
-      */}
-      <NetflixRow wideImage={false} title="Films Netflix" />
-      {/* 
-      🐶 Ajoute les 'props' suivants :
-        - 'watermark' à 'true'
-        - 'type' à TYPE_TV
-        - 'filter' à 'trending'
-        - 'wideImage' à 'false'
-      */}
-      <NetflixRow wideImage={true} title="Série Netflix" />
-
-      {/* 
-        👨‍✈️ Hugo le chef de projet demande d'ajouter une nouvelle ligne "Les mieux notés"
-        cette ligne contiendra des films avec le logo 'netflix' et les images en format large.
-        🐶 ajoute un  'NetflixRow' avec les bons props
-      */}
-
-      {/* 
-        👨‍✈️ Hugo le chef de projet demande d'ajouter une nouvelle ligne "Action & aventure"
-        cette ligne contiendra des series avec le logo 'netflix' et les images en format large.
-        🐶 ajoute un 'NetflixRow' avec les bons props
-        - l'id de genre 'Action & aventure' est le '10759'
-      */}
-
-      {/* 
-        👨‍✈️ Hugo le chef de projet demande d'ajouter une nouvelle ligne "Les meilleurs Thrillers"
-        cette ligne contiendra des series sans le logo 'netflix' et les images en format poster.
-        🐶 ajoute un 'NetflixRow' avec les bons props
-        - l'id de genre 'Les meilleurs Thrillers' est le '53'
-      */}
+      <NetflixRow
+        watermark={true}
+        type={TYPE_MOVIE}
+        filter="trending"
+        wideImage={true}
+        title="Films Netflix"
+      />
+      <NetflixRow
+        watermark={true}
+        type={TYPE_TV}
+        filter="trending"
+        wideImage={false}
+        title="Série Netflix"
+      />
+      <NetflixRow
+        watermark={true}
+        type={TYPE_MOVIE}
+        filter="toprated"
+        wideImage={true}
+        title="Les mieux notés"
+      />
+      <NetflixRow
+        watermark={true}
+        type={TYPE_TV}
+        filter="trending"
+        wideImage={true}
+        title="Action et aventure"
+      />
+      <NetflixRow
+        watermark={false}
+        type={TYPE_TV}
+        filter="genre"
+        param="53"
+        wideImage={false}
+        title="Les meilleurs Thrillers"
+      />
 
       {status === 'error' ? (
         <div className={classes.alert}>
