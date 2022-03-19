@@ -9,10 +9,7 @@ import {Alert, AlertTitle} from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import {useFetchData} from '../utils/hooks'
 import {TYPE_MOVIE, TYPE_TV} from '../config'
-import {
-  useParams,
-  useLocation
-} from "react-router-dom";
+import {useParams, useLocation} from 'react-router-dom'
 import './Netflix.css'
 
 const useStyles = makeStyles(theme => ({
@@ -26,13 +23,15 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const NetflixById = () => {
+const NetflixById = ({logout}) => {
   const classes = useStyles()
   const {data: headerMovie, error, status, execute} = useFetchData()
-  let { tvId, movieId } = useParams()
+  let {tvId, movieId} = useParams()
   const location = useLocation()
-  const [type,setType] = React.useState( location.pathname.includes(TYPE_TV) ? TYPE_TV : TYPE_MOVIE)
-  const [id,setId] = React.useState( type === TYPE_TV ? tvId : movieId)
+  const [type, setType] = React.useState(
+    location.pathname.includes(TYPE_TV) ? TYPE_TV : TYPE_MOVIE,
+  )
+  const [id, setId] = React.useState(type === TYPE_TV ? tvId : movieId)
   const [queried, setQueried] = React.useState(true)
 
   React.useEffect(() => {
@@ -50,10 +49,9 @@ const NetflixById = () => {
     setQueried(true)
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: 'smooth',
     })
   }, [location.pathname, movieId, tvId])
-  
 
   if (status === 'error') {
     // sera catché par ErrorBoundary
@@ -61,7 +59,7 @@ const NetflixById = () => {
   }
   return (
     <div>
-      <NetflixAppBar />
+      <NetflixAppBar logout={logout} />
       <NetflixHeader movie={headerMovie?.data} type={type} />
       <NetflixRow
         wideImage={true}

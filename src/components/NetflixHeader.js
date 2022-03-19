@@ -2,7 +2,7 @@ import React from 'react'
 import {imagePathOriginal, TYPE_MOVIE} from '../config'
 import {HeaderSkeleton} from './skeletons/HeaderSkeleton'
 
-const NetflixHeader = ({movie, type = TYPE_MOVIE}) => {
+const NetflixHeader = ({movie, type = TYPE_MOVIE, logout}) => {
   const title = type === TYPE_MOVIE ? movie?.title : movie?.name
   const imageUrl = `${imagePathOriginal}${movie?.backdrop_path}`
   const banner = {
