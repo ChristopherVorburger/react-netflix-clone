@@ -3,13 +3,13 @@ import {NetflixAppBar} from './NetflixAppBar'
 import {NetflixRow} from './NetflixRow'
 import {NetFlixFooter} from './NetFlixFooter'
 import {NetflixHeader} from './NetflixHeader'
-import {getRandomType, getRandomId} from '../utils/helper'
+import {getRandomId} from '../utils/helper'
 import {clientApi} from '../utils/clientApi'
 import {makeStyles} from '@mui/styles'
 import {Alert, AlertTitle} from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import {useFetchData} from '../utils/hooks'
-import {TYPE_MOVIE, TYPE_TV} from '../config'
+import {TYPE_TV} from '../config'
 import './Netflix.css'
 
 const useStyles = makeStyles(theme => ({
@@ -26,12 +26,13 @@ const useStyles = makeStyles(theme => ({
 const NetflixSeries = () => {
   const classes = useStyles()
   const {data: headerMovie, error, status, execute} = useFetchData()
-  const [type] = React.useState(getRandomType())
+  const [type] = React.useState(TYPE_TV)
   const defaultMovieId = getRandomId(type)
 
   React.useEffect(() => {
     execute(clientApi(`${type}/${defaultMovieId}`))
-  }, [execute, defaultMovieId, type])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [execute, type])
 
   if (status === 'error') {
     // sera catché par ErrorBoundary
@@ -41,30 +42,25 @@ const NetflixSeries = () => {
     <div>
       <NetflixAppBar />
       <NetflixHeader movie={headerMovie?.data} type={type} />
-      {/* 
-        🐶 utilise les bons 'props' pour respacter les spécifications de   
-        👨‍✈️ Hugo le chef de projet : "Séries tendances Netflix "
-        continue jusqu'a la fin
-      */}
       <NetflixRow
         wideImage={true}
         watermark={true}
-        type={TYPE_MOVIE}
+        type={TYPE_TV}
         filter="trending"
-        title="Films Netflix"
+        title="Séries tendances Netflix"
       />
       <NetflixRow
         wideImage={false}
         watermark={true}
         type={TYPE_TV}
-        filter="trending"
-        title="Série Netflix"
+        filter="toprated"
+        title="Séries les mieux notées"
       />
 
       <NetflixRow
-        type={TYPE_MOVIE}
-        filter="toprated"
-        title="Les mieux notés"
+        type={TYPE_TV}
+        filter="populaire"
+        title="Les séries populaires"
         watermark={true}
         wideImage={true}
       />
@@ -72,17 +68,17 @@ const NetflixSeries = () => {
       <NetflixRow
         type={TYPE_TV}
         filter="genre"
-        param="10759"
-        title="Action & aventure"
+        param="99"
+        title="Les documentaires"
         watermark={true}
         wideImage={true}
       />
 
       <NetflixRow
-        type={TYPE_MOVIE}
+        type={TYPE_TV}
         filter="genre"
-        param="53"
-        title="Les meilleurs Thriller"
+        param="80"
+        title="Les séries criminelles"
         watermark={false}
         wideImage={false}
       />

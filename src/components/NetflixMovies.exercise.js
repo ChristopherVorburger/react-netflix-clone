@@ -3,14 +3,13 @@ import {NetflixAppBar} from './NetflixAppBar'
 import {NetflixRow} from './NetflixRow'
 import {NetFlixFooter} from './NetFlixFooter'
 import {NetflixHeader} from './NetflixHeader'
-// 🐶 supprime getRandomType nous n'utilisons plus de types aléatoire
-import {getRandomType, getRandomId} from '../utils/helper'
+import {getRandomId} from '../utils/helper'
 import {clientApi} from '../utils/clientApi'
 import {makeStyles} from '@mui/styles'
 import {Alert, AlertTitle} from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
 import {useFetchData} from '../utils/hooks'
-import {TYPE_MOVIE, TYPE_TV} from '../config'
+import {TYPE_MOVIE} from '../config'
 import './Netflix.css'
 
 const useStyles = makeStyles(theme => ({
@@ -27,8 +26,7 @@ const useStyles = makeStyles(theme => ({
 const NetflixMovies = () => {
   const classes = useStyles()
   const {data: headerMovie, error, status, execute} = useFetchData()
-  // 🐶 fixe le bon type
-  const [type] = React.useState(getRandomType())
+  const [type] = React.useState(TYPE_MOVIE)
   const defaultMovieId = getRandomId(type)
 
   React.useEffect(() => {
@@ -51,49 +49,36 @@ const NetflixMovies = () => {
         filter="trending"
         title="Films Netflix"
       />
-      {/* 
-        🐶 utilise les bons 'props' pour respacter les spécifications de   
-        👨‍✈️ Hugo le chef de projet : "Les mieux notés"
-      */}
       <NetflixRow
         wideImage={false}
         watermark={true}
-        type={TYPE_TV}
-        filter="trending"
-        title="Série Netflix"
-      />
-      {/* 
-        🐶 Utilise les bons 'props' pour respacter les spécifications de   
-        👨‍✈️ Hugo le chef de projet : "Les films pouplaires"
-      */}
-      <NetflixRow
         type={TYPE_MOVIE}
         filter="toprated"
         title="Les mieux notés"
-        watermark={true}
-        wideImage={true}
       />
-      {/* 
-        🐶 Utilise les bons 'props' pour respacter les spécifications de   
-        👨‍✈️ Hugo le chef de projet : "Films Fantastiques"
-      */}
+
       <NetflixRow
-        type={TYPE_TV}
-        filter="genre"
-        param="10759"
-        title="Action & aventure"
+        type={TYPE_MOVIE}
+        filter="populaire"
+        title="Les films pouplaires"
         watermark={true}
         wideImage={true}
       />
-      {/* 
-        🐶 Utilise les bons 'props' pour respacter les spécifications de   
-        👨‍✈️ Hugo le chef de projet : "Les films de science fiction"
-      */}
+
       <NetflixRow
         type={TYPE_MOVIE}
         filter="genre"
-        param="53"
-        title="Les meilleurs Thriller"
+        param="14"
+        title="Films Fantastiques"
+        watermark={true}
+        wideImage={true}
+      />
+
+      <NetflixRow
+        type={TYPE_MOVIE}
+        filter="genre"
+        param="878"
+        title="Les films de science fiction"
         watermark={false}
         wideImage={false}
       />

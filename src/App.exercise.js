@@ -3,9 +3,12 @@ import {ThemeProvider} from '@mui/styles'
 import {createTheme} from '@mui/material/styles'
 import {ErrorBoundary} from 'react-error-boundary'
 import ErrorFallback from './components/ErrorFallback'
-// 🐶 importe le composant 'Error404' depuis '/components/Error404'
-// 🐶 importe le composant 'NetflixMovies', 'NetflixSeries','NetflixNews', 'NetflixById'
-// 🐶 importe -> import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import Error404 from 'components/Error404'
+import {NetflixById} from 'components/NetflixById'
+import {NetflixMovies} from 'components/NetflixMovies'
+import {NetflixSeries} from 'components/NetflixSeries'
+import {NetflixNews} from 'components/NetflixNews'
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 const theme = createTheme({
   palette: {
@@ -21,25 +24,21 @@ const theme = createTheme({
 
 function App() {
   return (
-    // 🐶 wrappe toute l'application avec <Router>
-    <ThemeProvider theme={theme}>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        {/* 
-          🐶 utilise <Routes> et  </Routes> pour determiner les routes
-          nous voulons les routes avec les configurations suivantes :
-          
-          1. path '/' -> <NetflixApp />
-          2. path '/tv/:tvId' -> <NetflixById />
-          3. path '/tv/:movieId' -> <NetflixById />
-          4. path '/series' -> <NetflixSeries />
-          5. path '/movies' -> <NetflixMovies />
-          6. path '/news' -> <NetflixNews />
-          7. path '/*' -> <Error404 />
-       
-        */}
-        <NetflixApp />
-      </ErrorBoundary>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Routes>
+            <Route path="/" exact={true} element={<NetflixApp />}></Route>
+            <Route path="/tv/:tvId" element={<NetflixById />}></Route>
+            <Route path="/movie/:movieId" element={<NetflixById />}></Route>
+            <Route path="/movies" element={<NetflixMovies />}></Route>
+            <Route path="/series" element={<NetflixSeries />}></Route>
+            <Route path="/news" element={<NetflixNews />}></Route>
+            <Route path="*" element={<Error404 />}></Route>
+          </Routes>
+        </ErrorBoundary>
+      </ThemeProvider>
+    </Router>
   )
 }
 
