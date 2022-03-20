@@ -10,8 +10,8 @@ import Backdrop from '@mui/material/Backdrop'
 import CircularProgress from '@mui/material/CircularProgress'
 import {QueryClient, QueryClientProvider} from 'react-query'
 import {ReactQueryDevtools} from 'react-query/devtools'
-import { QueryCache } from 'react-query'
-// 🐶 importe 'AuthContext' pour wrapper 'AuthApp' et 'UnauthApp'
+import {QueryCache} from 'react-query'
+import {AuthContext} from 'context/AuthContext.exercise'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,7 +31,6 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       retryDelay: 500,
       retry: 1,
-      // mutation options
     },
   },
 })
@@ -42,7 +41,7 @@ const queryCache = new QueryCache({
   },
   onSuccess: data => {
     console.log(data)
-  }
+  },
 })
 
 const theme = createTheme({
@@ -85,27 +84,38 @@ function App() {
       .then(user => setData(user))
       .catch(err => setAuthError(err))
   const logout = () => {
+    console.log('logout')
     authNetflix.logout()
     queryCache.clear()
     setData(null)
   }
-  // 🐶 créé objet contennant : authUser, authError, login, register, logout
-  // il sera passé en 'props' 'value' de <AuthContext.Provider />
+
+  const auth = {
+    authUser,
+    authError,
+    login,
+    register,
+    logout,
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-       {/* 🐶 wrappe 'Backdrop', 'AuthApp' 'UnauthApp' avec <AuthContext.Provider /> */}
-        {status === 'fetching' ? (
-          <Backdrop open={true}>
-            <CircularProgress color="primary" />
-          </Backdrop>
-        ) : authUser ? (
-          <AuthApp logout={logout} />
-        ) : (
-          <UnauthApp login={login} register={register} error={authError} />
-        )}
+        <AuthContext.Provider value={auth}>
+          {status === 'fetching' ? (
+            <Backdrop open={true}>
+              <CircularProgress color="primary" />
+            </Backdrop>
+          ) : authUser ? (
+            <AuthApp />
+          ) : (
+            <UnauthApp />
+          )}
+        </AuthContext.Provider>
       </ThemeProvider>
-      {process.env.NODE_ENV === 'development' && (  <ReactQueryDevtools initialIsOpen={false} />)}
+      {process.env.NODE_ENV === 'development' && (
+        <ReactQueryDevtools initialIsOpen={false} />
+      )}
     </QueryClientProvider>
   )
 }

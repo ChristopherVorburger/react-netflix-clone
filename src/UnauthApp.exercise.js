@@ -1,9 +1,7 @@
 import * as React from 'react'
 import {LoginRegister} from './components/LoginRegister'
 
-// ⛏️ supprime les props '{login, register, error}' car il sera récupéré via le context API ('AuthContext')
-// directement dans le composant 'src/componants/LoginRegister'
-function UnauthApp({login, register, error}) {
+function UnauthApp() {
   const imageUrl = '/images/posters.jpg'
   return (
     <div
@@ -27,12 +25,7 @@ function UnauthApp({login, register, error}) {
       />
 
       <div>
-        <LoginRegister
-          open={true}
-          login={login}
-          register={register}
-          error={error}
-        />
+        <LoginRegister open={true} />
       </div>
     </div>
   )

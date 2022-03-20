@@ -1,3 +1,4 @@
+import * as React from 'react'
 import {NetflixApp} from 'components/NetflixApp'
 import {ErrorBoundary} from 'react-error-boundary'
 import ErrorFallback from './components/ErrorFallback'
@@ -9,15 +10,14 @@ import {NetflixSeries} from 'components/NetflixSeries'
 import {NetflixNews} from 'components/NetflixNews'
 import {NetflixBookmark} from 'components/NetflixBookmark'
 import {NetflixSearch} from 'components/NetflixSearch'
-// 🐶 importe 'AuthContext' 
+import {AuthContext} from 'context/AuthContext.exercise'
 
-// ⛏️ supprime le prop 'logout' car il sera récupéré via le context API ('AuthContext')
-function AuthApp({logout}) {
-  // 🐶 Utilise le Hook 'useContext' pour récuperer logout de 'AuthContext'
+function AuthApp() {
+  const {logout} = React.useContext(AuthContext)
   return (
     <Router>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Routes>
+        <Routes>
           <Route path="/" element={<NetflixApp logout={logout} />} />
           <Route path="/tv/:tvId" element={<NetflixById logout={logout} />} />
           <Route
@@ -29,7 +29,10 @@ function AuthApp({logout}) {
           <Route path="/news" element={<NetflixNews logout={logout} />} />
           <Route path="/list" element={<NetflixBookmark logout={logout} />} />
           <Route path="*" element={<Error404 />} />
-          <Route path="/search/:query" element={<NetflixSearch logout={logout} />} />
+          <Route
+            path="/search/:query"
+            element={<NetflixSearch logout={logout} />}
+          />
         </Routes>
       </ErrorBoundary>
     </Router>

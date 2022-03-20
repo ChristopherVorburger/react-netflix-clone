@@ -7,7 +7,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import {styled, alpha} from '@mui/material/styles'
 import InputBase from '@mui/material/InputBase'
 import {useNavigate} from 'react-router-dom'
-// 🐶 importe 'AuthContext'
+import {AuthContext} from 'context/AuthContext.exercise'
 
 const Search = styled('div')(({theme}) => ({
   marginRight: '10px',
@@ -20,7 +20,6 @@ const Search = styled('div')(({theme}) => ({
   },
   width: '100%',
   [theme.breakpoints.up('sm')]: {
-    /*marginLeft: theme.spacing(1),*/
     width: 'auto',
   },
 }))
@@ -39,7 +38,6 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -51,9 +49,8 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
     },
   },
 }))
-// ⛏️ supprime le prop 'logout il sera récuperer de 'AuthContext'
-const NetflixAppBar = ({logout}) => {
-  // 🐶 utilise le Hook useContext pour récupérer {logout} de 'AuthContext'
+const NetflixAppBar = () => {
+  const {logout} = React.useContext(AuthContext)
   const navigate = useNavigate()
 
   const [appBarStyle, setAppBarStyle] = React.useState({
@@ -61,6 +58,7 @@ const NetflixAppBar = ({logout}) => {
     boxShadow: 'none',
   })
   const [query, setQuery] = React.useState('')
+
   React.useEffect(() => {
     const onScroll = e => {
       if (e.target.documentElement.scrollTop >= 100) {
