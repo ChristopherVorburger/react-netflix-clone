@@ -10,10 +10,10 @@ import {NetflixSeries} from 'components/NetflixSeries'
 import {NetflixNews} from 'components/NetflixNews'
 import {NetflixBookmark} from 'components/NetflixBookmark'
 import {NetflixSearch} from 'components/NetflixSearch'
-import {AuthContext} from 'context/AuthContext.exercise'
+import {useAuth} from 'context/AuthContext.exercise'
 
 function AuthApp() {
-  const {logout} = React.useContext(AuthContext)
+  const {logout} = useAuth()
   return (
     <Router>
       <ErrorBoundary FallbackComponent={ErrorFallback}>

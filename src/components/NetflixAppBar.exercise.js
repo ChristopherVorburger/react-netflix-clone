@@ -7,7 +7,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import {styled, alpha} from '@mui/material/styles'
 import InputBase from '@mui/material/InputBase'
 import {useNavigate} from 'react-router-dom'
-import {AuthContext} from 'context/AuthContext.exercise'
+import {useAuth} from 'context/AuthContext.exercise'
 
 const Search = styled('div')(({theme}) => ({
   marginRight: '10px',
@@ -50,7 +50,7 @@ const StyledInputBase = styled(InputBase)(({theme}) => ({
   },
 }))
 const NetflixAppBar = () => {
-  const {logout} = React.useContext(AuthContext)
+  const {logout} = useAuth()
   const navigate = useNavigate()
 
   const [appBarStyle, setAppBarStyle] = React.useState({

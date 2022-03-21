@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
-import {AuthContext} from 'context/AuthContext.exercise'
+import {useAuth} from 'context/AuthContext.exercise'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -104,7 +104,7 @@ const FormLogin = ({create = false, login, register, logout}) => {
 }
 
 function PopupLogin({open, handleClose, signup = false, status}) {
-  const {login, logout, register, authError: error} = useContext(AuthContext)
+  const {login, logout, register, authError: error} = useAuth()
   const classes = useStyles()
   const [create, setCreate] = React.useState(signup)
   const handleSignUp = () => {
