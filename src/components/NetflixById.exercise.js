@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {NetflixAppBar} from './NetflixAppBar'
 import {NetflixRow} from './NetflixRow'
 import {NetFlixFooter} from './NetFlixFooter'
@@ -8,6 +8,8 @@ import {useParams, useLocation} from 'react-router-dom'
 import {useMovie} from '../utils/hooksMovies'
 // 🐶 importe le Hook 'useNavigateMovie' il sera utile pour ajouter le film/serie
 // affiché dans la page, dans le contexte 'HistoryMoviesContext'
+import {useNavigateMovie} from '../context/HistoryMoviesContext'
+
 import './Netflix.css'
 
 const NetflixById = ({logout}) => {
@@ -20,14 +22,23 @@ const NetflixById = ({logout}) => {
   const headerMovie = useMovie(type, id)
 
   // 🐶 utilise le hook 'useNavigateMovie' pour acceder à  {series, movies, setMovies, setSeries}
-
+  const {series, movies, setMovies, setSeries} = useNavigateMovie()
   // 🐶 créé une constante qui correspondra on nombre d'elements max dans l'historique (sera utilisé plus tard)
-  // 🤖 `const MAX_ELEMENTS = 3`
+  const MAX_ELEMENTS = 3
 
   // 🐶 nous voulons maintenant mettre à jour la liste des films/series du context.
   // utilise 'useEffect' avec une dependance à 'headerMovie'
   // comme ça quand 'headerMovie' change, tu mettras à jour la liste des series/films
   // en utilisant `setSeries()` ou `setMovies()`
+  useEffect(() => {
+    if (headerMovie) {
+      if (type === TYPE_TV) {
+        setSeries([...series.slice(0, MAX_ELEMENTS - 1), headerMovie])
+      } else {
+        setMovies([...movies.slice(0, MAX_ELEMENTS - 1), headerMovie])
+      }
+    }
+  }, [headerMovie])
   // note : utilise un spread operator pour recopier les films / series existants
   // 📑 https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Operators/Spread_syntax
   // note 2 : limite le nombre d'éléments copié avec `slice()` et MAX_ELEMENTS
