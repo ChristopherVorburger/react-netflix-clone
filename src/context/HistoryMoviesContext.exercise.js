@@ -2,12 +2,45 @@
 import * as React from 'react'
 const HistoryMovieContext = React.createContext()
 
-const HistoryMovieProvider = props => {
-  const [movies, setMovies] = React.useState([])
-  const [series, setSeries] = React.useState([])
-  const value = {movies, series, setMovies, setSeries}
+const MAX_ELEMENTS = 3
 
-  return <HistoryMovieContext.Provider value={value} {...props} />
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'ADDMOVIE':
+      return {
+        ...state,
+        movies: [action.payload, ...state.movies.slice(0, MAX_ELEMENTS - 1)],
+      }
+    case 'ADDSERIE':
+      return {
+        ...state,
+        series: [action.payload, ...state.series.slice(0, MAX_ELEMENTS - 1)],
+      }
+
+    default:
+      throw new Error('Action non supportée')
+  }
+}
+
+const HistoryMovieProvider = props => {
+  const [state, dispatch] = React.useReducer(reducer, {series: [], movies: []})
+
+  const {series, movies} = state
+
+  const addMovie = movie => {
+    dispatch({type: 'ADDMOVIE', payload: movie})
+  }
+
+  const addSerie = serie => {
+    dispatch({type: 'ADDSERIE', payload: serie})
+  }
+
+  return (
+    <HistoryMovieContext.Provider
+      value={{series, movies, addMovie, addSerie}}
+      {...props}
+    />
+  )
 }
 
 const useNavigateMovie = () => {

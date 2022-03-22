@@ -6,8 +6,6 @@ import {NetflixHeader} from './NetflixHeader'
 import {TYPE_MOVIE, TYPE_TV} from '../config'
 import {useParams, useLocation} from 'react-router-dom'
 import {useMovie} from '../utils/hooksMovies'
-// 🐶 importe le Hook 'useNavigateMovie' il sera utile pour ajouter le film/serie
-// affiché dans la page, dans le contexte 'HistoryMoviesContext'
 import {useNavigateMovie} from '../context/HistoryMoviesContext'
 
 import './Netflix.css'
@@ -21,29 +19,17 @@ const NetflixById = ({logout}) => {
   const [id, setId] = React.useState(type === TYPE_TV ? tvId : movieId)
   const headerMovie = useMovie(type, id)
 
-  // 🐶 utilise le hook 'useNavigateMovie' pour acceder à  {series, movies, setMovies, setSeries}
-  const {series, movies, setMovies, setSeries} = useNavigateMovie()
-  // 🐶 créé une constante qui correspondra on nombre d'elements max dans l'historique (sera utilisé plus tard)
-  const MAX_ELEMENTS = 3
+  const {addMovie, addSerie} = useNavigateMovie()
 
-  // 🐶 nous voulons maintenant mettre à jour la liste des films/series du context.
-  // utilise 'useEffect' avec une dependance à 'headerMovie'
-  // comme ça quand 'headerMovie' change, tu mettras à jour la liste des series/films
-  // en utilisant `setSeries()` ou `setMovies()`
   useEffect(() => {
     if (headerMovie) {
       if (type === TYPE_TV) {
-        setSeries([...series.slice(0, MAX_ELEMENTS - 1), headerMovie])
+        addSerie(headerMovie)
       } else {
-        setMovies([...movies.slice(0, MAX_ELEMENTS - 1), headerMovie])
+        addMovie(headerMovie)
       }
     }
   }, [headerMovie])
-  // note : utilise un spread operator pour recopier les films / series existants
-  // 📑 https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Operators/Spread_syntax
-  // note 2 : limite le nombre d'éléments copié avec `slice()` et MAX_ELEMENTS
-  // 📑 https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
-  // exemple :
 
   React.useEffect(() => {
     const type = location.pathname.includes(TYPE_TV) ? TYPE_TV : TYPE_MOVIE

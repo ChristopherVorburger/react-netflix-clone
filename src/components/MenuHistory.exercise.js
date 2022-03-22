@@ -92,18 +92,18 @@ function MenuHistory({style}) {
           <VisibilityIcon />
           Dernières visites
         </MenuItem>
-        {series.map((serie, index) => (
+        {series?.map((serie, index) => (
           <MenuItem key={index} onClick={handleClose} disableRipple>
             <MenuHistoryCard movie={serie} type={TYPE_TV} wideImage={true} />
           </MenuItem>
         ))}
         <Divider sx={{my: 0.5}} />
-        {movies.map((movie, index) => (
+        {movies?.map((movie, index) => (
           <MenuItem key={index} onClick={handleClose} disableRipple>
             <MenuHistoryCard movie={movie} type={TYPE_MOVIE} wideImage={true} />
           </MenuItem>
         ))}
-        {series.length === 0 && movies.length === 0 ? (
+        {series?.length === 0 && movies?.length === 0 ? (
           <MenuItem onClick={handleClose} disableRipple>
             <DoNotDisturbIcon />
             Pas d'historique
