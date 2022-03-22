@@ -27,13 +27,13 @@ const HistoryMovieProvider = props => {
 
   const {series, movies} = state
 
-  const addMovie = movie => {
+  const addMovie = React.useCallback(movie => {
     dispatch({type: 'ADDMOVIE', payload: movie})
-  }
+  }, [])
 
-  const addSerie = serie => {
+  const addSerie = React.useCallback(serie => {
     dispatch({type: 'ADDSERIE', payload: serie})
-  }
+  }, [])
 
   return (
     <HistoryMovieContext.Provider
