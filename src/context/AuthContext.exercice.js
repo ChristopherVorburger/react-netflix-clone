@@ -7,7 +7,6 @@ import {useClearHistory} from './HistoryMoviesContext'
 import LoadingFullScreen from '../components/LoadingFullScreen'
 const AuthContext = React.createContext()
 
-// 🐶 optimise les performences de AuthProvider
 const useAuth = () => {
   const context = React.useContext(AuthContext)
   if (!context) {
@@ -35,32 +34,38 @@ const AuthProvider = props => {
   }, [execute])
 
   const [authError, setAuthError] = React.useState()
-
-  // 🐶 utilise useCallback sur les fonctions 'login' , 'register' , 'logout'
-  const login = data =>
-    authNetflix
-      .login(data)
-      .then(user => setData(user))
-      .catch(err => setAuthError(err))
-  const register = data =>
-    authNetflix
-      .register(data)
-      .then(user => setData(user))
-      .catch(err => setAuthError(err))
-  const logout = () => {
+  const login = React.useCallback(
+    data =>
+      authNetflix
+        .login(data)
+        .then(user => setData(user))
+        .catch(err => setAuthError(err)),
+    [setData],
+  )
+  const register = React.useCallback(
+    data =>
+      authNetflix
+        .register(data)
+        .then(user => setData(user))
+        .catch(err => setAuthError(err)),
+    [setData],
+  )
+  const logout = React.useCallback(() => {
     authNetflix.logout()
     queryclient.clear()
     clearHistory()
     setData(null)
-  }
+  }, [clearHistory, queryclient, setData])
+  const value = React.useMemo(
+    () => ({authUser, login, register, logout, authError}),
+    [authError, authUser, login, logout, register],
+  )
 
   if (status === 'fetching' || status === 'idle') {
     return <LoadingFullScreen />
   }
+
   if (status === 'done') {
-    // 🐶 utilise useMemo pour mémoïser {authUser, login, register, logout, authError}
-    // attention les hooks ne peuvent pas etre utiliser dans du code conditionnel
-    const value = {authUser, login, register, logout, authError}
     return <AuthContext.Provider value={value} {...props} />
   }
   throw new Error('status invalide')

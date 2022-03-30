@@ -2,7 +2,7 @@ import * as React from 'react'
 import {TYPE_TV} from '../config'
 const HistoryMovieContext = React.createContext()
 const MAX_ELEMENTS = 3
-// 🐶 optimise les performences de HistoryMovieProvider
+
 const reducer = (state, action) => {
   switch (action.type) {
     case 'addMovie':
@@ -46,8 +46,9 @@ const HistoryMovieProvider = props => {
     })
   }, [])
   const {series, movies} = state
-  // 🐶 utilise useMemo pour mémoïser {movies, series, addMovie, addSerie, clearHistory}
-  const value = {movies, series, addMovie, addSerie, clearHistory}
+  const value = React.useMemo(() => {
+    return {movies, series, addMovie, addSerie, clearHistory}
+  }, [addMovie, addSerie, clearHistory, movies, series])
   return <HistoryMovieContext.Provider value={value} {...props} />
 }
 

@@ -1,22 +1,18 @@
 import * as React from 'react'
 import './mocks'
-// 🐶 Note que pour 'AuthApp' et 'UnauthApp' on a utilisé un 'export default'
-// 🤖 ancien code
-// import {AuthApp} from 'AuthApp'
-// import {UnauthApp} from 'UnauthApp'
-// ceci est necessaire pour React.Lazy
-
-// ⛏️ supprime les deux imports de 'AuthApp' et 'UnauthApp' car nous allons les importer dynamiquement
-import AuthApp from 'AuthApp'
-import UnauthApp from 'UnauthApp'
 import {useAuth} from './context/AuthContext'
 import {AppProviders} from './context'
+import LoadingFullScreen from './components/LoadingFullScreen'
 
-// 🐶 importe 'LoadingFullScreen' le composant qui sera utilisé en fallback de React.Suspense
-// 🤖 import LoadingFullScreen from './components/LoadingFullScreen'
-
-// 🐶 importe dynamiquement 'AuthApp' et 'UnauthApp' grace a 'React.Lazy'
-// 📝 https://reactjs.org/docs/code-splitting.html#reactlazy
+// On importe les composants dynamiquement avec React.lazy
+// Donc c'est seulement au moment ou on aura besoin de la ressource
+// qu'elle sera chargée
+const UnauthApp = React.lazy(() =>
+  import(/* webpackPrefetch: true */ './UnauthApp'),
+)
+const AuthApp = React.lazy(() =>
+  import(/* webpackPrefetch: true */ './AuthApp'),
+)
 
 function App() {
   return (
@@ -28,9 +24,12 @@ function App() {
 
 const AppConsumer = () => {
   const {authUser} = useAuth()
-  // 🐶 wrappe le rendu avec  <React.Suspense> et utilisel le prop 'fallback'
-  // pour passer le composant de chargement <LoadingFullScreen />
-  return authUser ? <AuthApp /> : <UnauthApp />
+  return (
+    // On wrappe le rendu avec React.Suspense et un fallback
+    <React.Suspense fallback={<LoadingFullScreen />}>
+      {authUser ? <AuthApp /> : <UnauthApp />}
+    </React.Suspense>
+  )
 }
 
 export {App}
