@@ -3,15 +3,13 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import {App} from './App'
 import reportWebVitals from './reportWebVitals'
-//🐶 importe le composant <Profiler/>
+import {Profiler} from './components/Profiler'
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* 🐶 Wrappe 'App' avec <React.Profiler onRender={(...args) => console.log(...args)} > 
-        dans un premier temps pour tester*/}
-
-    {/* 🐶 Ensuite Wrappe 'App' avec le composant Profiler */}
-    <App />
+    <Profiler id="App NetFlix" phases={[]}>
+      <App />
+    </Profiler>
   </React.StrictMode>,
   document.getElementById('root'),
 )
