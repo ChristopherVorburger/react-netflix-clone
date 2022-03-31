@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import * as React from 'react'
 import {
   render,
@@ -8,11 +7,17 @@ import {
   resultsMovies,
   bookmark,
 } from 'test/test-utils'
-//import userEvent from '@testing-library/user-event'
-import {AUTH_URL, API_URL} from 'config'
-//import {App} from 'App'
+import userEvent from '@testing-library/user-event'
+import {
+  AUTH_URL,
+  API_URL,
+  localStorageTokenKey,
+  imagePathOriginal,
+} from 'config'
+import {App} from 'App'
 import * as authNetflix from '../utils/authNetflixProvider'
 import {server, rest} from 'mocks'
+import {TYPE_MOVIE} from 'config'
 
 afterEach(async () => {
   await authNetflix.logout()
@@ -33,33 +38,74 @@ beforeEach(() => {
     rest.get(`${AUTH_URL}/bookmark`, async (req, res, ctx) => {
       return res(ctx.json({bookmark}))
     }),
+    rest.post(`${AUTH_URL}/bookmark/:type`, async (req, res, ctx) => {
+      const {id} = req.body
+      const {type} = req.params
+      const newbookmark = {...bookmark}
+      newbookmark[type === TYPE_MOVIE ? 'movies' : 'series']?.push(id)
+      return res(ctx.json({bookmark: newbookmark}))
+    }),
     rest.get(`${API_URL}/*`, async (req, res, ctx) => {
       return res(ctx.json(resultsMovies))
     }),
-    //bonus-4 bookmark
   )
 })
 
-//bonus-3
-test.todo("rendu de l'app avec Token et NetFlixById")
-// 🐶 créé une route qui à le meme id que sampleMovie
-// 🤖 const route = `/movie/645886`
+test("rendu de l'app avec Token et NetFlixById", async () => {
+  const route = `/movie/645886`
+  window.history.pushState({}, 'Test page', route)
+  window.scrollTo = jest.fn()
+  const user = {id: '1', username: 'fakeUsername', token: 'FAKE_TOKEN'}
+  const filmName = sampleMovie.title
+  const overview = sampleMovie.overview
+  const imageUrl = `${imagePathOriginal}${sampleMovie?.backdrop_path}`
+  window.localStorage.setItem(localStorageTokenKey, user.token)
 
-// mock windows.scrollTo avec jest.fn()
+  render(<App></App>)
 
-// 🐶 change de route avec window.history.pushState
-// 🐶 met le token dans le localstorage
+  expect(screen.getByRole('alert')).toBeInTheDocument()
+  await waitForElementToBeRemoved(() => screen.getByRole('alert'))
+  await waitForElementToBeRemoved(() =>
+    screen.getByRole('button', {name: "Plus d'infos"}),
+  )
+  //screen.debug()
+  expect(screen.getByRole('heading', {name: filmName})).toBeInTheDocument()
+  expect(screen.getByRole('heading', {name: overview})).toBeInTheDocument()
+  expect(screen.getByRole('banner', {name: 'banner'})).toHaveAttribute(
+    'style',
+    expect.stringContaining(imageUrl),
+  )
+})
 
-// 🐶 fait le rendu de app
-// attend que le chargement ne soit plus la (screen.getByRole('alert'))
-// attend que le skeleton ne soit plus la (screen.getByRole('button', {name: "Plus d'infos"}),)
+test("rendu de l'app et click", async () => {
+  const route = `/movie/645886`
+  window.history.pushState({}, 'Test page', route)
+  window.scrollTo = jest.fn()
+  const user = {
+    id: '1',
+    username: 'fakeUsername',
+    token: 'YWRtaW46bHVveGlueGlhbjkx',
+  }
+  const filmName = sampleMovie.title
+  const overview = sampleMovie.overview
+  const imageUrl = `${imagePathOriginal}${sampleMovie?.backdrop_path}`
 
-// 🐶 verifie le nom du film, la description et que le style contienne l'url de l'image
+  window.localStorage.setItem(localStorageTokenKey, user.token)
+  render(<App></App>)
 
-//bonus-4
-test.todo("rendu de l'app et click")
-// 🐶 Meme chose que précedement pour le rendu
+  await waitForElementToBeRemoved(() => screen.getByRole('alert'))
+  expect(screen.getByRole('heading', {name: filmName})).toBeInTheDocument()
+  expect(screen.getByRole('heading', {name: overview})).toBeInTheDocument()
+  expect(screen.getByRole('banner', {name: 'banner'})).toHaveAttribute(
+    'style',
+    expect.stringContaining(imageUrl),
+  )
 
-// 🐶 simule un clique sur 'Ajouter à ma liste'
-// 🐶 attend que le boutton 'Ajouter à ma liste' disparaisse
-// 🐶 verifie la présencde du boutton Supprimer de ma liste
+  userEvent.click(screen.getByRole('button', {name: /Ajouter à ma liste/i}))
+  await waitForElementToBeRemoved(() =>
+    screen.getByRole('button', {name: /Ajouter à ma liste/i}),
+  )
+  expect(
+    screen.getByRole('button', {name: /Supprimer de ma liste/i}),
+  ).toBeInTheDocument()
+})
