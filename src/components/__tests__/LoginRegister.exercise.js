@@ -18,4 +18,11 @@ test('Popup de login ou register', async () => {
   userEvent.click(screen.getByRole('button', {name: /Nouveau sur Netflix ?/i}))
 
   expect(screen.getByRole('heading', {name: register})).toBeInTheDocument()
+
+  // Click Event
+  userEvent.click(
+    screen.getByRole('button', {name: /Vous possédez déjà un compte ?/i}),
+  )
+
+  expect(screen.getByRole('heading', {name: connexion})).toBeInTheDocument()
 })

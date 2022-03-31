@@ -147,7 +147,7 @@ function PopupLogin({open, handleClose, signup = false, status}) {
             </Button>
           ) : (
             <Button onClick={handleSignIn} color="secondary" autoFocus>
-              Vous posséder déjà un compte ? {spinner}
+              Vous possédez déjà un compte ? {spinner}
             </Button>
           )}
         </DialogActions>
