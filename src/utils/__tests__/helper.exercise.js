@@ -1,19 +1,39 @@
-// 🐶 importe les fonctions et constates que tu vas avoir besoins de tester
-// import {
-//   getRandomIntInclusive,
-// } from '../helper'
+// Import des fonctions à tester
+import {TYPE_MOVIE} from 'config'
+import {TYPE_TV} from 'config'
+import {
+  getRandomIntInclusive,
+  getRandomType,
+  getRandomId,
+  getRandomMovie,
+  getRandomSerie,
+} from '../helper'
 
-// 🐶 test la fonction 'getRandomIntInclusive', tu peux utiliser 'toBeGreaterThanOrEqual' et 'toBeLessThanOrEqual'
-test.todo('Retourne une nombre entier alétoire')
+test('Retourne une nombre entier alétoire', () => {
+  const min = 10
+  const max = 100
+  expect(getRandomIntInclusive(min, max)).toBeGreaterThanOrEqual(min)
+  expect(getRandomIntInclusive(min, max)).toBeLessThanOrEqual(max)
+})
 
-// 🐶 test la fonction 'getRandomType' : tu peux utiliser 'toContain'
-test.todo('Retourne un type aléatoire')
+test('Retourne un type aléatoire', () => {
+  const types = [TYPE_TV, TYPE_MOVIE]
+  expect(types).toContain(getRandomType())
+})
 
-// 🐶 test la fonction 'getRandomMovie' : tu peux utiliser 'toContain'
-test.todo('Retourne un film aléatoire')
+test('Retourne un film aléatoire', () => {
+  const moviesIds = [399566, 602734, 579047, 385128, 615658]
+  expect(moviesIds).toContain(getRandomMovie())
+})
 
-// 🐶 test la fonction 'getRandomSerie' : tu peux utiliser 'toContain'
-test.todo('Retourne une série aléatoire')
+test('Retourne une série aléatoire', () => {
+  const tvIds = [71446, 60574, 1399, 66732]
+  expect(tvIds).toContain(getRandomSerie())
+})
 
-// 🐶 test la fonction 'getRandomId' : tu peux utiliser 'toContain'
-test.todo('Retourne une série ou un film aléatoire')
+test('Retourne une série ou un film aléatoire', () => {
+  const moviesIds = [399566, 602734, 579047, 385128, 615658]
+  const tvIds = [71446, 60574, 1399, 66732]
+  expect(tvIds).toContain(getRandomId(TYPE_TV))
+  expect(moviesIds).toContain(getRandomId(TYPE_MOVIE))
+})
