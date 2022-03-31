@@ -5,10 +5,6 @@ import {AUTH_URL} from '../../config'
 import * as authNetflix from '../../utils/authNetflixProvider'
 jest.mock('../../utils/authNetflixProvider')
 
-beforeAll(() => server.listen())
-afterAll(() => server.close())
-afterEach(() => server.resetHandlers())
-
 test('faire une requete HTTP GET vers un endpoint', async () => {
   const endpoint = 'fake-endpoint'
   const resultRequest = {mockResult: 'TEST'}
